@@ -12,10 +12,14 @@ const rl = readline.createInterface({
 
 
 const pigLatin = (word) => {
-
-  // Your code here
-
-}
+  word = word.trim(' ')
+  word = word.toLowerCase()
+  let vowels = ['a', 'e', 'i', 'o', 'u']
+  
+  
+    // Your code here
+  
+  }
 
 // the first function called in the program to get an input from the user
 // to run the function use the command: node main.js
