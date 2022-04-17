@@ -15,7 +15,18 @@ const pigLatin = (word) => {
   word = word.trim(' ')
   word = word.toLowerCase()
   let vowels = ['a', 'e', 'i', 'o', 'u']
+  let consonants = "";
+  if (vowels.includes(word[0])) {
+    return word + ending;
+  }
   
+      for (let i = 0; i < word.length; i++) {
+        const char = word[i];
+        if (vowels.includes(char)) {
+          break;
+        }
+        consonants += char;
+      }
   
     // Your code here
   
