@@ -12,25 +12,70 @@ const rl = readline.createInterface({
 
 
 const pigLatin = (word) => {
-  word = word.trim(' ')
-  word = word.toLowerCase()
-  let vowels = ['a', 'e', 'i', 'o', 'u']
-  let consonants = "";
-  if (vowels.includes(word[0])) {
-    return word + ending;
+const translate = (word) => {
+  let vowelPosition = positionOfFirstVowel(word);
+
+  if (vowelPosition === -1) {
+    // If the word doesn't have a vowel add ay to the end of it
+    return noVowels(word);
+  } else if (vowelPosition === 0) {
+    // If the first letter is a vowel add yay to the end
+    return beginsWithVowel(word);
   }
-  
-      for (let i = 0; i < word.length; i++) {
-        const char = word[i];
-        if (vowels.includes(char)) {
-          break;
-        }
-        consonants += char;
-      }
-  
-    // Your code here
-  
+  // If the first letter is a constanant find the fist vowel.
+  // split the word at the vowel and swap sides. Add ay to the end of it
+  return beginsWithConsonant(word, vowelPosition);
+}
+
+const positionOfFirstVowel = (word) => {
+  for (let i = 0; i < word.length; i++) {
+    const vowels = 'aeiou';
+    let letter = word[i];
+
+  // Your code here
+    if (vowels.includes(letter)) {
+      return i;
+    }
   }
+  return -1;
+}
+
+const noVowels = (word) => {
+  return word += 'ay';
+}
+
+const beginsWithVowel = (word) => {
+  return word += 'yay';
+}
+
+const beginsWithConsonant = (word, position) => {
+  let firstString = word.substr(0, position);
+  let secondString = word.substr(position);
+  return secondString += firstString += 'ay';
+}
+
+const stringToArrayFormatted = (string) => {
+  return string.trim().toLowerCase().split(' ');
+}
+
+const pigLatin = (string) => {
+  let wordArray = stringToArrayFormatted(string);
+
+  // Check for multiple words in string
+  if (wordArray.length > 1) {
+    let newString = '';
+    for (let i = 0; i < wordArray.length; i++) {
+      newString += translate(wordArray[i]) + ' ';
+    }
+    return newString.trim();
+  }
+
+  return translate(wordArray[0]);
+}
+
+
+
+
 
 // the first function called in the program to get an input from the user
 // to run the function use the command: node main.js
@@ -38,15 +83,14 @@ const pigLatin = (word) => {
 const getPrompt = () => {
   rl.question('word ', (answer) => {
     console.log( pigLatin(answer) );
+    console.log(pigLatin(answer));
     getPrompt();
   });
 }
-
 // Unit Tests
 // to use them run the command: npm test main.js
 // to close them ctrl + C
 if (typeof describe === 'function') {
-
   describe('#pigLatin()', () => {
     it('should translate a simple word', () => {
       assert.equal(pigLatin('car'), 'arcay');
@@ -66,20 +110,11 @@ if (typeof describe === 'function') {
     });
   });
 } else {
-
   getPrompt();
-
 }
-
-
-
-
-
-
 // **********
 //   HINTS
 // **********
-
 // break your code into pieces and focus on one piece at a time...
 // 1. if word begins with a vowel send to one function: adds "yay"
 // 2. if word begins with a consonant send to another function: splices off beginning, returns word with new ending.
